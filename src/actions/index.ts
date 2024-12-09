@@ -43,14 +43,23 @@ export async function createSnippet(
     };
   }
 
-  const snippet = await db.snippet.create({
-    data: {
-      title,
-      code,
-    },
-  });
-
-  console.log(snippet);
-
+  try {
+    await db.snippet.create({
+      data: {
+        title,
+        code,
+      },
+    });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return {
+        message: err.message,
+      };
+    } else {
+      return {
+        message: 'Something went wrong...',
+      };
+    }
+  }
   redirect('/');
 }
